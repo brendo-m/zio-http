@@ -75,13 +75,15 @@ object URL {
       case null         => -1
     }
 
-    val scheme = Scheme.fromString2(uri.getScheme)
-    val port   = if (uri.getPort != -1) uri.getPort else portFromScheme(scheme)
+    val scheme  = Scheme.fromString2(uri.getScheme)
+    val uriPort = uri.getPort
+    val port    = if (uriPort != -1) uriPort else portFromScheme(scheme)
+    val host    = uri.getHost
 
-    if (port != -1 && scheme != null && uri.getHost != null)
+    if (port != -1 && scheme != null && host != null)
       URL(
         Path(uri.getRawPath),
-        URL.Location.Absolute(scheme, uri.getHost, port),
+        URL.Location.Absolute(scheme, host, port),
         queryParams(uri.getRawQuery),
         Fragment.fromURI(uri),
       )
